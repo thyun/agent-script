@@ -14,7 +14,7 @@ DOWNLOAD_FILE=metricbeat.tar.gz
 
 install () {
     echo -n "Installing $PROGRAM: "
-	curl localhost/$DOWNLOAD_FILE --output $DOWNLOAD_FILE
+	curl http://localhost/downloads/$DOWNLOAD_FILE --output $DOWNLOAD_FILE
 	tar xvfpz $DOWNLOAD_FILE
 	$PROGRAM_HOME/$PROGRAM_SCRIPT start
 }

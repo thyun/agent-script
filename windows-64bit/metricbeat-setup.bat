@@ -66,7 +66,7 @@ set CMD_LINE_ARGS=%*
 
 :execute
 echo Installing %PROGRAM%:
-rem curl google.com -o %DOWNLOAD_FILE%
+rem curl http://localhost/downloads/%DOWNLOAD_FILE% -o %DOWNLOAD_FILE%
 PowerShell -Command "$ProgressPreference=\"SilentlyContinue\"; Expand-Archive %DOWNLOAD_FILE% ."
 rem PowerShell -Command "Expand-Archive %DOWNLOAD_FILE% ."
 "%PROGRAM_HOME%%PROGRAM_SCRIPT%" start

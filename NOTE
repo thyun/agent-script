@@ -1,0 +1,6 @@
+- directory 삭제하고 설치?
+- windows binary 복사
+- Document 
+* Tested on CentOS 7.6
+* Windoes 10 - If your Windows 10 build is 17063, or later, cUrl is included by default
+  Use powershell - https://superuser.com/questions/25538/how-to-download-files-from-command-line-in-windows-like-wget-or-curl
