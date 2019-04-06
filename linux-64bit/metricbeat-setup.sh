@@ -20,6 +20,7 @@ install () {
 }
 
 upgrade () {
+    echo "Upgrade not implemented"
 }
 
 # Start program
