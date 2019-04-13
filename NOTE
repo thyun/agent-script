@@ -1,6 +1,10 @@
-- directory 삭제하고 설치?
-- windows binary 복사
+TODO
+- Directory move & install: Windows 10 done
 - Document 
-* Tested on CentOS 7.6
-* Windoes 10 - If your Windows 10 build is 17063, or later, cUrl is included by default
-  Use powershell - https://superuser.com/questions/25538/how-to-download-files-from-command-line-in-windows-like-wget-or-curl
+  Tested on CentOS 7.6
+  Windoes 10 - If your Windows 10 build is 17063, or later, cUrl is included by default
+
+DONE
+- Windowns 10
+  Use powershell to download - https://superuser.com/questions/25538/how-to-download-files-from-command-line-in-windows-like-wget-or-curl
+  Binary 복사

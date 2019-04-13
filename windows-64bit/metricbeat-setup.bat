@@ -11,6 +11,7 @@ set PROGRAM=metricbeat
 set PROGRAM_HOME=%SETUP_HOME%%PROGRAM%\
 set PROGRAM_SCRIPT=%PROGRAM%.bat
 set DOWNLOAD_FILE=metricbeat.zip
+set DOWNLOAD_URL=http://localhost/downloads/%DOWNLOAD_FILE%
 
 @rem Add default JVM options here. You can also use JAVA_OPTS and GRADLE_OPTS to pass JVM options to this script.
 set DEFAULT_JVM_OPTS=
@@ -48,10 +49,8 @@ goto fail
 
 :init
 @rem Get command-line arguments, handling Windows variants
-echo %SETUP_BASE_NAME%
-echo %SETUP_HOME%
-echo %PROGRAM_HOME%
-echo %PROGRAM_SCRIPT%
+echo SETUP_HOME=%SETUP_HOME%
+echo PROGRAM_HOME=%PROGRAM_HOME%
 if not "%OS%" == "Windows_NT" goto win9xME_args
 
 :win9xME_args
@@ -66,16 +65,27 @@ set CMD_LINE_ARGS=%*
 
 :execute
 echo Installing %PROGRAM%:
-rem curl http://localhost/downloads/%DOWNLOAD_FILE% -o %DOWNLOAD_FILE%
+if NOT EXIST %PROGRAM_HOME% goto continue_execute
+
+:move_dir
+echo Previously installed directory exist, moving
+call %PROGRAM_HOME%%PROGRAM_SCRIPT% stop
+MOVE %PROGRAM% %PROGRAM%-%date:~0,4%%date:~5,2%%date:~8,2%-%time:~0,2%%time:~3,2%%time:~6,2%
+
+:continue_execute
+PowerShell -Command "(new-object System.Net.WebClient).DownloadFile(\"%DOWNLOAD_URL%\", \".\%DOWNLOAD_FILE%\")"
+rem curl %DOWNLOAD_URL% -o %DOWNLOAD_FILE%
+if NOT "%ERRORLEVEL%"=="0" goto fail
 PowerShell -Command "$ProgressPreference=\"SilentlyContinue\"; Expand-Archive %DOWNLOAD_FILE% ."
-rem PowerShell -Command "Expand-Archive %DOWNLOAD_FILE% ."
 "%PROGRAM_HOME%%PROGRAM_SCRIPT%" start
+if NOT "%ERRORLEVEL%"=="0" goto fail
 
 :end
 @rem End local scope for the variables with windows NT shell
 if "%ERRORLEVEL%"=="0" goto mainEnd
 
 :fail
+echo metricbeat-setup failed
 exit /b 1
 
 :mainEnd

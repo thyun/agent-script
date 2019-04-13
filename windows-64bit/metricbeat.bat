@@ -5,7 +5,7 @@ if "%OS%"=="Windows_NT" setlocal
 
 set DIRNAME=%~dp0
 if "%DIRNAME%" == "" set DIRNAME=.
-echo "DIRNAME=%DIRNAME%"
+rem echo "DIRNAME=%DIRNAME%"
 
 set PROGRAM=metricbeat.exe
 set METRICBEAT_HOME=%DIRNAME%
@@ -42,7 +42,8 @@ goto end
 
 :stop
 echo Stopping %PROGRAM%:
-taskkill /f /im "%PROGRAM%"
+tasklist /FI "IMAGENAME eq %PROGRAM%" 2>NUL | find /I /N "%PROGRAM%">NUL
+if "%ERRORLEVEL%"=="0" taskkill /f /im "%PROGRAM%"
 goto end
 
 :end
