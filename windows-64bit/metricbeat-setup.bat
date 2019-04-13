@@ -69,7 +69,7 @@ if NOT EXIST %PROGRAM_HOME% goto continue_execute
 
 :move_dir
 echo Previously installed directory exist, moving
-call %PROGRAM_HOME%%PROGRAM_SCRIPT% stop
+call "%PROGRAM_HOME%%PROGRAM_SCRIPT%" stop
 MOVE %PROGRAM% %PROGRAM%-%date:~0,4%%date:~5,2%%date:~8,2%-%time:~0,2%%time:~3,2%%time:~6,2%
 
 :continue_execute
