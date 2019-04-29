@@ -82,7 +82,7 @@ if NOT "%ERRORLEVEL%"=="0" goto fail
 PowerShell -Command "$ProgressPreference=\"SilentlyContinue\"; Expand-Archive %DOWNLOAD_FILE% ."
 PowerShell -Command "(new-object System.Net.WebClient).DownloadFile(\"%DOWNLOAD_EXT_URL%\", \".\%DOWNLOAD_EXT%\")"
 if NOT "%ERRORLEVEL%"=="0" goto fail
-PowerShell -Command "$ProgressPreference=\"SilentlyContinue\"; Expand-Archive %DOWNLOAD_EXT% ."
+PowerShell -Command "$ProgressPreference=\"SilentlyContinue\"; Expand-Archive -Force %DOWNLOAD_EXT% ."
 
 "%PROGRAM_HOME%%PROGRAM_SCRIPT%" start
 if NOT "%ERRORLEVEL%"=="0" goto fail
