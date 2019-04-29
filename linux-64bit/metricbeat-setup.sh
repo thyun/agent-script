@@ -3,6 +3,10 @@
 # Source function library.
 . /etc/init.d/functions
 
+DOWNLOAD_HOME=http://192.168.124.131:8080
+DOWNLOAD_FILE=metricbeat.tar.gz
+DOWNLOAD_EXT=metricbeat-ext.tar.gz
+
 SCRIPT="$0"
 SETUP_HOME=`dirname "$SCRIPT"`
 SETUP_HOME=`cd "$SETUP_HOME"; pwd`
@@ -10,7 +14,6 @@ cd $SETUP_HOME
 PROGRAM=metricbeat
 PROGRAM_HOME=$SETUP_HOME/metricbeat
 PROGRAM_SCRIPT=metricbeat.sh
-DOWNLOAD_FILE=metricbeat.tar.gz
 
 install () {
     echo -n "Installing $PROGRAM: "
@@ -20,8 +23,10 @@ install () {
 		mv $PROGRAM $PROGRAM-`date +%Y%m%d-%H%M%S`
     fi
 
-	curl http://localhost/downloads/$DOWNLOAD_FILE --output $DOWNLOAD_FILE
+	curl  ${DOWNLOAD_HOME}/downloads/$DOWNLOAD_FILE --output $DOWNLOAD_FILE
 	tar xvfpz $DOWNLOAD_FILE
+	curl  ${DOWNLOAD_HOME}/downloads/$DOWNLOAD_EXT --output $DOWNLOAD_EXT
+	tar xvfpz $DOWNLOAD_EXT
 	$PROGRAM_HOME/$PROGRAM_SCRIPT start
 }
 

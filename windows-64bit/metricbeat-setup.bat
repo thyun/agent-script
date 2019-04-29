@@ -3,6 +3,12 @@
 @rem Set local scope for the variables with windows NT shell
 if "%OS%"=="Windows_NT" setlocal
 
+set DOWNLOAD_HOME=http://192.168.124.131:8080
+set DOWNLOAD_FILE=metricbeat.zip
+set DOWNLOAD_FILE_URL=%DOWNLOAD_HOME%/downloads/%DOWNLOAD_FILE%
+set DOWNLOAD_EXT=metricbeat-ext.zip
+set DOWNLOAD_EXT_URL=%DOWNLOAD_HOME%/downloads/%DOWNLOAD_EXT%
+
 set DIRNAME=%~dp0
 if "%DIRNAME%" == "" set DIRNAME=.
 set SETUP_BASE_NAME=%~n0
@@ -10,8 +16,6 @@ set SETUP_HOME=%DIRNAME%
 set PROGRAM=metricbeat
 set PROGRAM_HOME=%SETUP_HOME%%PROGRAM%\
 set PROGRAM_SCRIPT=%PROGRAM%.bat
-set DOWNLOAD_FILE=metricbeat.zip
-set DOWNLOAD_URL=http://localhost/downloads/%DOWNLOAD_FILE%
 
 @rem Add default JVM options here. You can also use JAVA_OPTS and GRADLE_OPTS to pass JVM options to this script.
 set DEFAULT_JVM_OPTS=
@@ -73,10 +77,13 @@ call "%PROGRAM_HOME%%PROGRAM_SCRIPT%" stop
 MOVE %PROGRAM% %PROGRAM%-%date:~0,4%%date:~5,2%%date:~8,2%-%time:~0,2%%time:~3,2%%time:~6,2%
 
 :continue_execute
-PowerShell -Command "(new-object System.Net.WebClient).DownloadFile(\"%DOWNLOAD_URL%\", \".\%DOWNLOAD_FILE%\")"
-rem curl %DOWNLOAD_URL% -o %DOWNLOAD_FILE%
+PowerShell -Command "(new-object System.Net.WebClient).DownloadFile(\"%DOWNLOAD_FILE_URL%\", \".\%DOWNLOAD_FILE%\")"
 if NOT "%ERRORLEVEL%"=="0" goto fail
 PowerShell -Command "$ProgressPreference=\"SilentlyContinue\"; Expand-Archive %DOWNLOAD_FILE% ."
+PowerShell -Command "(new-object System.Net.WebClient).DownloadFile(\"%DOWNLOAD_EXT_URL%\", \".\%DOWNLOAD_EXT%\")"
+if NOT "%ERRORLEVEL%"=="0" goto fail
+PowerShell -Command "$ProgressPreference=\"SilentlyContinue\"; Expand-Archive %DOWNLOAD_EXT% ."
+
 "%PROGRAM_HOME%%PROGRAM_SCRIPT%" start
 if NOT "%ERRORLEVEL%"=="0" goto fail
 
