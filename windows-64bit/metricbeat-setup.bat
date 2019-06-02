@@ -3,11 +3,13 @@
 @rem Set local scope for the variables with windows NT shell
 if "%OS%"=="Windows_NT" setlocal
 
-set DOWNLOAD_HOME=http://192.168.124.131:8080
-set DOWNLOAD_FILE=metricbeat.zip
-set DOWNLOAD_FILE_URL=%DOWNLOAD_HOME%/downloads/%DOWNLOAD_FILE%
-set DOWNLOAD_EXT=metricbeat-ext.zip
-set DOWNLOAD_EXT_URL=%DOWNLOAD_HOME%/downloads/%DOWNLOAD_EXT%
+set DOWNLOAD_BASE_HOME=http://downloads.jmsight.com
+set DOWNLOAD_BASE_NAME=metricbeat-6.7.2-windows-x86_64
+set DOWNLOAD_BASE_FILE=%DOWNLOAD_BASE_NAME%.zip
+set DOWNLOAD_BASE_URL=%DOWNLOAD_BASE_HOME%/downloads/%DOWNLOAD_BASE_FILE%
+set DOWNLOAD_EXT_HOME=http://downloads.jmsight.com
+set DOWNLOAD_EXT_FILE=metricbeat-ext.zip
+set DOWNLOAD_EXT_URL=%DOWNLOAD_BASE_HOME%/downloads/%DOWNLOAD_EXT_FILE%
 
 set DIRNAME=%~dp0
 if "%DIRNAME%" == "" set DIRNAME=.
@@ -77,12 +79,14 @@ call "%PROGRAM_HOME%%PROGRAM_SCRIPT%" stop
 MOVE %PROGRAM% %PROGRAM%-%date:~0,4%%date:~5,2%%date:~8,2%-%time:~0,2%%time:~3,2%%time:~6,2%
 
 :continue_execute
-PowerShell -Command "(new-object System.Net.WebClient).DownloadFile(\"%DOWNLOAD_FILE_URL%\", \".\%DOWNLOAD_FILE%\")"
+PowerShell -Command "(new-object System.Net.WebClient).DownloadFile(\"%DOWNLOAD_BASE_URL%\", \".\%DOWNLOAD_BASE_FILE%\")"
 if NOT "%ERRORLEVEL%"=="0" goto fail
-PowerShell -Command "$ProgressPreference=\"SilentlyContinue\"; Expand-Archive %DOWNLOAD_FILE% ."
-PowerShell -Command "(new-object System.Net.WebClient).DownloadFile(\"%DOWNLOAD_EXT_URL%\", \".\%DOWNLOAD_EXT%\")"
+PowerShell -Command "$ProgressPreference=\"SilentlyContinue\"; Expand-Archive %DOWNLOAD_BASE_FILE% ."
+MOVE %DOWNLOAD_BASE_NAME% %PROGRAM%
+
+PowerShell -Command "(new-object System.Net.WebClient).DownloadFile(\"%DOWNLOAD_EXT_URL%\", \".\%DOWNLOAD_EXT_FILE%\")"
 if NOT "%ERRORLEVEL%"=="0" goto fail
-PowerShell -Command "$ProgressPreference=\"SilentlyContinue\"; Expand-Archive -Force %DOWNLOAD_EXT% ."
+PowerShell -Command "$ProgressPreference=\"SilentlyContinue\"; Expand-Archive -Force %DOWNLOAD_EXT_FILE% ."
 
 "%PROGRAM_HOME%%PROGRAM_SCRIPT%" start
 if NOT "%ERRORLEVEL%"=="0" goto fail
