@@ -30,7 +30,8 @@ start () {
    	fi
 
     echo -n $"Starting $PROGRAM: "
-    daemon "$METRICBEAT_HOME/$PROGRAM -e -c metricbeat.yml >& /dev/null &"
+    nohup $METRICBEAT_HOME/$PROGRAM -e -c metricbeat.yml &
+#    daemon "$METRICBEAT_HOME/$PROGRAM -e -c metricbeat.yml &"
 	RETVAL=$?; echo
     PID=`pidofproc $PROGRAM`
 	echo $PID > $METRICBEAT_PID
