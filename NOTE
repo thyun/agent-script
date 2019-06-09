@@ -1,10 +1,12 @@
 TODO
-- Document 
-  Tested on CentOS 7.6
-  Windoes 10 - If your Windows 10 build is 17063, or later, cUrl is included by default
-- Windows 10 binary 복사
+- Linux - metricbeat.yml.template -> metricbeat.yml
 
 DONE
-- Directory move & install: Linux done, Windows 10 done
+- Windows - Add jmsightId
+- Windows - metricbeat.yml.template -> metricbeat.yml
+- Linux - Add jmsightId
+- Document tested OS
+  CentOS 7.6 
+  Windoes 10 tested - If your Windows 10 build is 17063, or later, cUrl is included by default
 - Windowns 10 use powershell to download 
   https://superuser.com/questions/25538/how-to-download-files-from-command-line-in-windows-like-wget-or-curl

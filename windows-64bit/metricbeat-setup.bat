@@ -18,6 +18,7 @@ set SETUP_HOME=%DIRNAME%
 set PROGRAM=metricbeat
 set PROGRAM_HOME=%SETUP_HOME%%PROGRAM%\
 set PROGRAM_SCRIPT=%PROGRAM%.bat
+set PROGRAM_YML=%PROGRAM%.yml
 
 @rem Add default JVM options here. You can also use JAVA_OPTS and GRADLE_OPTS to pass JVM options to this script.
 set DEFAULT_JVM_OPTS=
@@ -57,6 +58,10 @@ goto fail
 @rem Get command-line arguments, handling Windows variants
 echo SETUP_HOME=%SETUP_HOME%
 echo PROGRAM_HOME=%PROGRAM_HOME%
+set CMD=%1
+set JMSIGHT_ID=%2
+if not "%CMD%" == "install" goto usage
+if "%JMSIGHT_ID%" == "" goto usage
 if not "%OS%" == "Windows_NT" goto win9xME_args
 
 :win9xME_args
@@ -88,6 +93,7 @@ PowerShell -Command "(new-object System.Net.WebClient).DownloadFile(\"%DOWNLOAD_
 if NOT "%ERRORLEVEL%"=="0" goto fail
 PowerShell -Command "$ProgressPreference=\"SilentlyContinue\"; Expand-Archive -Force %DOWNLOAD_EXT_FILE% ."
 
+PowerShell -Command "(Get-Content -path %PROGRAM_HOME%%PROGRAM_YML%.template).replace('%%[jmsightId]', '%JMSIGHT_ID%')" > %PROGRAM_HOME%%PROGRAM_YML%
 "%PROGRAM_HOME%%PROGRAM_SCRIPT%" start
 if NOT "%ERRORLEVEL%"=="0" goto fail
 
@@ -98,6 +104,10 @@ if "%ERRORLEVEL%"=="0" goto mainEnd
 :fail
 echo metricbeat-setup failed
 exit /b 1
+
+:usage
+echo Usage: %0 install {jmsightId}
+echo ex) metricbeat-setup.bat install JMSIGHT-DEV-190523175500
 
 :mainEnd
 if "%OS%"=="Windows_NT" endlocal
